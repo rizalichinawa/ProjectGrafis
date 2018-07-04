@@ -43,6 +43,24 @@ private int oldMouseY;
 public void init(GLAutoDrawable drawable) {
 GL gl = drawable.getGL();
 gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+gl.glShadeModel(GL.GL_FLAT);
+float ambient[]={1.0f,1.0f,1.0f,1.0f};
+float difusse[]={1.0f,1.0f,1.0f,1.0f};
+float specular[]={0.2f,1.0f,0.2f,1.0f};
+float position[]={20.0f,30.0f,20.0f,0.0f};
+gl.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, ambient,0);
+gl.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, difusse,0);
+gl.glLightfv(GL.GL_LIGHT0, GL.GL_POSITION, position,0);
+gl.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, specular,0);
+float[] mambient ={ 0.1745f, 0.01175f, 0.01175f, 0.55f
+};
+float[] mdiffuse ={0.61424f, 0.04136f, 0.04136f, 0.55f };
+float[] mspecular ={0.727811f, 0.626959f, 0.626959f, 0.55f };
+float mshine =76.8f ;
+gl.glMaterialfv(GL.GL_FRONT,GL.GL_AMBIENT,mambient,0);
+gl.glMaterialfv(GL.GL_FRONT,GL.GL_DIFFUSE,mdiffuse,0);
+gl.glMaterialfv(GL.GL_FRONT,GL.GL_SPECULAR,mspecular, 0);
+gl.glMaterialf (GL.GL_FRONT,GL.GL_SHININESS,mshine);
 gl.glEnable(GL.GL_LIGHTING);
 gl.glEnable(GL.GL_LIGHT0);
 gl.glEnable(GL.GL_DEPTH_TEST);
@@ -73,26 +91,28 @@ GLU glu = new GLU();
 gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 // Reset the current matrix to the "identity"
 gl.glLoadIdentity();
-glu.gluLookAt(10,10,10, // eye pos
+glu.gluLookAt(10,10,10, // eye pos lihat objeknya dari jarak brpa
 0,0,0, // look at
 0,0,1); // up
-gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
-gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f);
+gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f); // ini koding pakai mouse
+gl.glRotatef(view_roty, 0.0f, 1.0f, 0.0f); 
 Objek.kotak(gl);
+gl.glPushMatrix(); // nambah
+gl.glPushMatrix(); 
 gl.glPushMatrix();
-gl.glPushMatrix();
-gl.glPushMatrix();
-gl.glPushMatrix();
+//gl.glPushMatrix();
 gl.glTranslatef(0f, 0f, 0f);
 Objek.segitiga(gl);
-gl.glPopMatrix();
+gl.glPopMatrix(); //
 gl.glTranslatef(9f, 1f, 0f);
 gl.glRotatef(angle, 0f, 5f, 0f);
 Objek.baling(gl);
 gl.glPopMatrix();
-gl.glTranslatef(1f, 1f, 0f);
-gl.glRotatef(angle, 0f, 0.0f, -5f);
-Objek.ekor3(gl);
+gl.glTranslatef(1f, 1f, -0.1f);
+gl.glRotatef(90, 1f, 0.0f, 0.0f); // arah putaran
+gl.glRotatef(angle, 0.0f, 1.0f, 0.0f); // arah putaran
+//gl.glRotatef(-90f, -1f, 0f, -5f);
+Objek.baling(gl);
 gl.glPopMatrix();
 gl.glTranslatef(1f, 1f, 0f);
 Objek.ekor(gl);
@@ -101,13 +121,7 @@ gl.glTranslatef(0f, 0f, 0f);
 Objek.ekor2(gl);
 gl.glPopMatrix();
 
-angle +=direction;
-if(angle>20){
-    direction=-direction;
-}else if(angle<-50){
-    direction=-direction;
-}
-angle += 0.2f;
+angle += 2f; // kecepatan berputar
 }
 public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
 }
